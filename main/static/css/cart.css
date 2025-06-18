@@ -1,0 +1,121 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f9f9f9;
+}
+
+.header {
+    background: rgba(255, 255, 255, 0.85);
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 10px 28px;
+    position: relative;
+}
+
+.profile-logo {
+    height: 50px;
+    margin-right: 20px;
+}
+
+.nav-buttons {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 30px;
+}
+
+.nav-buttons a {
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #111;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.nav-buttons a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+.item-page {
+    padding: 40px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+table th, table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.size-select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #fff;
+    appearance: none;
+}
+
+.remove-btn {
+    background-color: #444444;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.remove-btn:hover {
+    background-color: #c9302c;
+}
+
+form {
+    max-width: 500px;
+    margin-top: 30px;
+}
+
+form input, form select, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: white;
+}
+
+.order-button {
+    display: inline-block;
+    background-color: #222;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.order-button:hover {
+    background-color: #444;
+}

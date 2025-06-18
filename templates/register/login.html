@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Login</h2>
+            <form action="{% url 'register/login' %}" method="POST">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="error-message">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                    {% if form.errors.username %}
+                        <div class="error-message">
+                            {% for error in form.errors.username %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    {% if form.errors.password %}
+                        <div class="error-message">
+                            {% for error in form.errors.password %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn">Log In</button>
+            </form>
+
+            <p class="toggle-form">Don't have an account? <a href="{% url 'register/registration' %}">Register</a></p>
+        </div>
+    </div>
+</body>
+</html>

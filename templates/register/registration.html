@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Create an Account</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    {{ form.username }}
+                    {% for error in form.username.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="input-group">
+                    <label for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="input-group">
+                    <label for="{{ form.password.id_for_label }}">Password</label>
+                    {{ form.password }}
+                    {% for error in form.password.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="input-group">
+                    <label for="{{ form.password_confirm.id_for_label }}">Confirm Password</label>
+                    {{ form.password_confirm }}
+                    {% for error in form.password_confirm.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn">Register</button>
+            </form>
+            <p class="toggle-form">Already have an account? <a href="{% url 'register/login' %}">Log In</a></p>
+        </div>
+    </div>
+</body>
+</html>

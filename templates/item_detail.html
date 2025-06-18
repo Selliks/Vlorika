@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ item.title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/item_detail.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="header">
+    <a href="{% url 'main' %}">
+        <img src="{% static 'images/VL-logo.jpg' %}" alt="Профіль" class="profile-logo">
+    </a>
+
+    <div class="nav-buttons">
+        <a href="{% url 'profile' %}">МІЙ ПРОФІЛЬ</a>
+        <a href="{% url 'cart' %}" class="cart-link">Корзина</a>
+    </div>
+</header>
+
+<main class="item-page">
+    <div class="item-container">
+        <div class="image-preview">
+            {% for img in item.images.all %}
+                <img src="{{ img.image.url }}" class="preview-img {% if forloop.first %}active{% endif %}">
+            {% endfor %}
+            <div class="thumbnails">
+                {% for img in item.images.all %}
+                    <img src="{{ img.image.url }}" class="thumbnail" onclick="selectImage(this)">
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="item-details">
+            <h1>{{ item.title }}</h1>
+            <p class="price">{{ item.price }} грн</p>
+            <p class="description">{{ item.description }}</p>
+            <p class="sizes">Доступні розміри:
+                {% for size in item.sizes.all %}
+                    <span class="size">{{ size.name }}</span>
+                {% empty %}
+                    <span>Немає</span>
+                {% endfor %}
+            </p>
+            <a href="{% url 'add_to_cart' item.id %}" class="order-button">Додати в кошик</a>
+        </div>
+    </div>
+
+    <div class="trends-section">
+        <h2 class="trend-title">Топ товари</h2>
+        <div class="trends-scroll">
+            {% for item in random_items %}
+                <a href="{% url 'item_detail' item.id %}" class="trend-link">
+                    <div class="trend-card">
+                        {% if item.images.first %}
+                            <img src="{{ item.images.first.image.url }}" alt="{{ item.title }}" class="trend-image">
+                        {% else %}
+                            <img src="{% static 'images/default.jpg' %}" alt="Немає фото" class="trend-image">
+                        {% endif %}
+                        <div class="trend-title">{{ item.title }}</div>
+                        <div class="trend-price">{{ item.price }} грн</div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+
+<script>
+    function selectImage(thumbnail) {
+        document.querySelectorAll('.preview-img').forEach(img => img.classList.remove('active'));
+        const src = thumbnail.src;
+        document.querySelectorAll('.preview-img').forEach(img => {
+            if (img.src === src) img.classList.add('active');
+        });
+    }
+</script>
+
+</body>
+</html>

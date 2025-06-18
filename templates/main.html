@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vlorika</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+
+<header class="header">
+    <a href="{% url 'main' %}">
+        <img src="{% static 'images/VL-logo.jpg' %}" alt="Профіль" class="profile-logo">
+    </a>
+
+
+    <div class="nav-buttons">
+        <a href="{% url 'profile' %}">МІЙ ПРОФІЛЬ</a>
+        <a href="{% url 'cart' %}" class="cart-link">Корзина</a>
+        <a href="{% url 'catalog' %}">Каталог</a>
+        <!-- Можеш додати ще кнопки -->
+        <!-- <a href="#">КАТАЛОГ</a> -->
+        <!-- <a href="#">КОНТАКТИ</a> -->
+    </div>
+</header>
+
+<section class="hero"></section>
+
+<main>
+    <section class="trends-section">
+        <h2 class="trend-title">Чоловічі тренди</h2>
+        <div class="scroll-wrapper">
+            <button class="scroll-btn left" onclick="scrollTrends('male', -1)">&#10094;</button>
+            <div class="trends-scroll" id="male-trends">
+                {% for item in male_trends %}
+                    <a href="{% url 'item_detail' item.id %}" class="trend-link">
+                        <div class="item-card trend-card">
+                            {% if item.images.first %}
+                                <img src="{{ item.images.first.image.url }}" alt="{{ item.title }}" class="item-image">
+                            {% else %}
+                                <img src="{% static 'images/default.jpg' %}" alt="Немає фото" class="item-image">
+                            {% endif %}
+                            <div class="item-info">
+                                <div class="item-title">{{ item.title }}</div>
+                                <div class="item-price">{{ item.price }} грн</div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <button class="scroll-btn right" onclick="scrollTrends('male', 1)">&#10095;</button>
+        </div>
+    </section>
+
+    <section class="trends-section">
+        <h2 class="trend-title">Жіночі тренди</h2>
+        <div class="scroll-wrapper">
+            <button class="scroll-btn left" onclick="scrollTrends('female', -1)">&#10094;</button>
+            <div class="trends-scroll" id="female-trends">
+                {% for item in female_trends %}
+                    <a href="{% url 'item_detail' item.id %}" class="trend-link">
+                        <div class="item-card trend-card">
+                            {% if item.images.first %}
+                                <img src="{{ item.images.first.image.url }}" alt="{{ item.title }}" class="item-image">
+                            {% else %}
+                                <img src="{% static 'images/default.jpg' %}" alt="Немає фото" class="item-image">
+                            {% endif %}
+                            <div class="item-info">
+                                <div class="item-title">{{ item.title }}</div>
+                                <div class="item-price">{{ item.price }} грн</div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <button class="scroll-btn right" onclick="scrollTrends('female', 1)">&#10095;</button>
+        </div>
+    </section>
+</main>
+
+<script>
+function scrollTrends(id, direction) {
+    const container = document.getElementById(id + '-trends');
+    const scrollAmount = 220 * 2; // 2 карточки
+    container.scrollBy({
+        left: scrollAmount * direction,
+        behavior: 'smooth'
+    });
+}
+</script>
+
+</body>
+</html>
