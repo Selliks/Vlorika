@@ -15,19 +15,16 @@
 
 
     <div class="nav-buttons">
-        <a href="{% url 'profile' %}">МІЙ ПРОФІЛЬ</a>
+        <a href="{% url 'catalog' %}">Чоловічий одяг</a>
         <a href="{% url 'cart' %}" class="cart-link">Корзина</a>
-        <a href="{% url 'catalog' %}">Каталог</a>
-        <!-- Можеш додати ще кнопки -->
-        <!-- <a href="#">КАТАЛОГ</a> -->
-        <!-- <a href="#">КОНТАКТИ</a> -->
+        <a href="{% url 'catalog' %}#female">Жіночий одяг</a>
     </div>
 </header>
 
     <main class="catalog-page">
         <h1>Каталог</h1>
 
-        <section class="trends-section">
+        <section id="male" class="trends-section">
             <h2 class="trend-title">Чоловічий одяг</h2>
             {% for type in male_types %}
                 <h3 class="category-title">{{ type.name }}</h3>
@@ -55,7 +52,7 @@
             {% endfor %}
         </section>
 
-        <section class="trends-section">
+        <section id="female" class="trends-section">
             <h2 class="trend-title">Жіночий одяг</h2>
             {% for type in female_types %}
                 <h3 class="category-title">{{ type.name }}</h3>

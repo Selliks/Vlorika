@@ -1,7 +1,5 @@
 import random
-from django.contrib import messages
-from django.contrib.auth import authenticate, logout, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Item, Size, Type
 from .forms import LoginForm, RegisterForm, OrderForm
@@ -16,10 +14,6 @@ def main(request):
         'male_trends': male_trends,
         'female_trends': female_trends,
     })
-
-
-def profile(request):
-    return render(request, "profile.html")
 
 
 def item_detail(request, item_id):
@@ -99,15 +93,6 @@ def remove_from_cart(request, item_id):
     cart.pop(str(item_id), None)
     request.session['cart'] = cart
     return redirect('cart')
-
-
-@login_required
-def logout_view(request):
-    if request.method == 'POST':
-        logout(request)
-        messages.success(request, "You have been logged out successfully.")
-        return redirect('main')
-    return render(request, 'logout.html')
 
 
 def login_view(request):
