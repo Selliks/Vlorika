@@ -25,51 +25,57 @@
     <h1>Корзина</h1>
 
     {% if items %}
-        <table>
-        <thead>
-            <tr>
-                <th>Фото</th>
-                <th>Товар</th>
-                <th>Кількість</th>
-                <th>Ціна</th>
-                <th>Розмір</th>
-                <th>Дія</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in items %}
-            <tr>
-                <td>
-                    {% if entry.item.images.first %}
-                        <img src="{{ entry.item.images.first.image.url }}" alt="{{ entry.item.title }}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 4px;">
-                    {% else %}
-                        <img src="{% static 'images/default.jpg' %}" alt="Фото відсутнє" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
-                    {% endif %}
-                </td>
-                <td>{{ entry.item.title }}</td>
-                <td>{{ entry.qty }}</td>
-                <td>{{ entry.item.price }} грн</td>
-                <td>
-                    <select name="sizes_{{ entry.item.id }}" class="size-select">
-                        {% for size in entry.item.sizes.all %}
-                            <option value="{{ size.id }}" {% if entry.size.id == size.id %}selected{% endif %}>
-                                {{ size.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </td>
-            <td>
-                <button onclick="location.href='{% url 'remove_from_cart' entry.item.id %}'" class="remove-btn">Видалити</button>
-            </td>
-            {% endfor %}
-        </tbody>
-    </table>
-    <p><strong>Загальна сума:</strong> {{ total_price }} грн</p>
-
-    <h2>Оформлення замовлення</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <table>
+            <thead>
+                <tr>
+                    <th>Фото</th>
+                    <th>Товар</th>
+                    <th>Кількість</th>
+                    <th>Ціна</th>
+                    <th>Розмір</th>
+                    <th>Дія</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in items %}
+                <tr>
+                    <td>
+                        {% if entry.item.images.first %}
+                            <img src="{{ entry.item.images.first.image.url }}" alt="{{ entry.item.title }}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 4px;">
+                        {% else %}
+                            <img src="{% static 'images/default.jpg' %}" alt="Фото відсутнє" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
+                        {% endif %}
+                    </td>
+                    <td>{{ entry.item.title }}</td>
+                    <td>{{ entry.qty }}</td>
+                    <td>{{ entry.item.price }} грн</td>
+                    <td>
+                        <select name="sizes_{{ entry.item.id }}" class="size-select" required>
+                            <option value="">Оберіть розмір</option>
+                            {% for size in entry.item.sizes.all %}
+                                <option value="{{ size.id }}" {% if entry.size and entry.size.id == size.id %}selected{% endif %}>
+                                    {{ size.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" onclick="location.href='{% url 'remove_from_cart' entry.item.id %}'" class="remove-btn">Видалити</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p><strong>Загальна сума:</strong> {{ total_price }} грн</p>
+
+        <h2>Оформлення замовлення</h2>
+        <div class="form-fields">
+            {{ form.as_p }}
+        </div>
+
         <button type="submit" class="order-button">Підтвердити замовлення</button>
     </form>
 

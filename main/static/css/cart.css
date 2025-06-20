@@ -87,7 +87,7 @@ table th, table td {
     background-color: #c9302c;
 }
 
-form {
+.form-fields {
     max-width: 500px;
     margin-top: 30px;
 }

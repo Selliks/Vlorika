@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 from .views import (main, login_view, registration_view, item_detail, cart_view,
-                    add_to_cart, remove_from_cart, catalog_view)
+                    add_to_cart, remove_from_cart, catalog_view, order_success)
 
 urlpatterns = [
     path('', main, name='main'),
@@ -11,6 +11,7 @@ urlpatterns = [
     path('item/<int:item_id>/', item_detail, name='item_detail'),
     path('item/<int:item_id>/add_to_cart/', add_to_cart, name='add_to_cart'),
     path('cart/', cart_view, name='cart'),
+    path('order/success/<int:order_id>/', order_success, name='order_success'),
     path('cart/remove/<int:item_id>/', remove_from_cart, name='remove_from_cart'),
     path('catalog/', catalog_view, name='catalog'),
 ]

@@ -1,7 +1,8 @@
 import random
 from django.contrib.auth import authenticate, login
+from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Item, Size, Type
+from .models import Item, Size, Type, OrderItem, Order
 from .forms import LoginForm, RegisterForm, OrderForm
 
 
@@ -42,46 +43,62 @@ def catalog_view(request):
     })
 
 
+def order_success(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'order_success.html', {'order': order})
+
+
 def cart_view(request):
     cart = request.session.get('cart', {})
     items = []
     total_price = 0
 
+    # Приводимо всі записи до правильного формату
     for item_id, entry in cart.items():
-        try:
-            item = get_object_or_404(Item, id=int(item_id))
-        except:
-            continue
-
         if isinstance(entry, int):
-            entry = {'qty': entry, 'size_id': None}
-            cart[item_id] = entry
+            cart[item_id] = {'qty': entry, 'size_id': None}
+    request.session['cart'] = cart  # оновлюємо сесію
 
+    if request.method == 'POST':
+        # Оновлюємо розміри в cart з POST
+        for item_id in cart:
+            size_id = request.POST.get(f'sizes_{item_id}')
+            if size_id:
+                cart[item_id]['size_id'] = int(size_id)
+        request.session['cart'] = cart
+
+    # ОНОВЛЕНЕ: формуємо items ПІСЛЯ того, як обновлено size_id
+    for item_id, entry in cart.items():
+        item = get_object_or_404(Item, id=int(item_id))
         qty = entry.get('qty', 1)
-        size_id = entry.get('size_id')
-        size = Size.objects.filter(id=size_id).first()
+        size = Size.objects.filter(id=entry.get('size_id')).first()
         total = item.price * qty
         total_price += total
-
         items.append({
             'item': item,
             'qty': qty,
-            'total': total,
             'size': size,
+            'total': total,
         })
 
     if request.method == 'POST':
-        for entry in items:
-            size_id = request.POST.get(f'sizes_{entry["item"].id}')
-            if size_id:
-                cart[str(entry["item"].id)]['size_id'] = int(size_id)
-        request.session['cart'] = cart
-
         form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save()
-            request.session['cart'] = {}
-            return render(request, 'main.html', {'order': order})
+        if form.is_valid() and items:
+            with transaction.atomic():
+                order = form.save()
+
+                for entry in items:
+                    OrderItem.objects.create(
+                        order=order,
+                        item=entry['item'],
+                        quantity=entry['qty'],
+                        price=entry['item'].price,
+                        size=entry['size']
+                    )
+
+                request.session['cart'] = {}
+
+            return redirect('order_success', order_id=order.id)
     else:
         form = OrderForm()
 

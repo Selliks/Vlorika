@@ -1,4 +1,5 @@
 body {
+    padding: 0;
     margin: 0;
     font-family: 'Montserrat', sans-serif;
     background-color: #f9f9f9;
@@ -6,9 +7,13 @@ body {
 
 .header {
     background: rgba(255, 255, 255, 0.85);
-    padding: 10px 30px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
     display: flex;
     align-items: center;
+    padding: 10px 30px;
     position: relative;
 }
 
@@ -20,10 +25,15 @@ body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    gap: 30px;
 }
 
 .nav-buttons a {
     font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
     text-decoration: none;
     color: #111;
     padding: 8px 16px;
