@@ -8,28 +8,30 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}" />
 </head>
 <body>
-    <header class="header">
+<header class="header">
     <a href="{% url 'main' %}">
         <img src="{% static 'images/VL-logo.jpg' %}" alt="Профіль" class="profile-logo">
     </a>
 
-
     <div class="nav-buttons">
-        <a href="{% url 'catalog' %}">Чоловічий одяг</a>
-        <a href="{% url 'cart' %}" class="cart-link">Корзина</a>
+        <a href="{% url 'catalog' %}#male">Чоловічий одяг</a>
         <a href="{% url 'catalog' %}#female">Жіночий одяг</a>
+        <a href="{% url 'catalog' %}#unisex">Унісекс</a>
+        <a href="{% url 'cart' %}" class="cart-link">Корзина</a>
     </div>
 </header>
 
-    <main class="catalog-page">
-        <h1>Каталог</h1>
+<main class="catalog-page">
+    <h1>Каталог</h1>
 
-        <section id="male" class="trends-section">
-            <h2 class="trend-title">Чоловічий одяг</h2>
-            {% for type in male_types %}
-                <h3 class="category-title">{{ type.name }}</h3>
-                <div class="trends-scroll">
-                    {% for item in type.items.all %}
+    <!-- Чоловічий одяг -->
+    <section id="male" class="trends-section">
+        <h2 class="trend-title">Чоловічий одяг</h2>
+        {% for type in male_types %}
+            <h3 class="category-title">{{ type.name }}</h3>
+            <div class="trends-scroll">
+                {% for item in type.items.all %}
+                    {% if item.gender == "male" %}
                         <a href="{% url 'item_detail' item.id %}" class="item-link">
                             <div class="item-card trend-card">
                                 {% if item.images.first %}
@@ -43,21 +45,20 @@
                                 </div>
                             </div>
                         </a>
-                    {% empty %}
-                        <p>Немає товарів.</p>
-                    {% endfor %}
-                </div>
-            {% empty %}
-                <p>Немає категорій чоловічого одягу.</p>
-            {% endfor %}
-        </section>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </section>
 
-        <section id="female" class="trends-section">
-            <h2 class="trend-title">Жіночий одяг</h2>
-            {% for type in female_types %}
-                <h3 class="category-title">{{ type.name }}</h3>
-                <div class="trends-scroll">
-                    {% for item in type.items.all %}
+    <!-- Жіночий одяг -->
+    <section id="female" class="trends-section">
+        <h2 class="trend-title">Жіночий одяг</h2>
+        {% for type in female_types %}
+            <h3 class="category-title">{{ type.name }}</h3>
+            <div class="trends-scroll">
+                {% for item in type.items.all %}
+                    {% if item.gender == "female" %}
                         <a href="{% url 'item_detail' item.id %}" class="item-link">
                             <div class="item-card trend-card">
                                 {% if item.images.first %}
@@ -71,14 +72,38 @@
                                 </div>
                             </div>
                         </a>
-                    {% empty %}
-                        <p>Немає товарів.</p>
-                    {% endfor %}
-                </div>
-            {% empty %}
-                <p>Немає категорій жіночого одягу.</p>
-            {% endfor %}
-        </section>
-    </main>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </section>
+
+    <!-- Унісекс -->
+    <section id="unisex" class="trends-section">
+        <h2 class="trend-title">Унісекс</h2>
+        {% for type in unisex_types %}
+            <h3 class="category-title">{{ type.name }}</h3>
+            <div class="trends-scroll">
+                {% for item in type.items.all %}
+                    {% if item.gender == "unisex" %}
+                        <a href="{% url 'item_detail' item.id %}" class="item-link">
+                            <div class="item-card trend-card">
+                                {% if item.images.first %}
+                                    <img src="{{ item.images.first.image.url }}" alt="{{ item.title }}" class="item-image" />
+                                {% else %}
+                                    <img src="{% static 'images/default.jpg' %}" alt="Немає фото" class="item-image" />
+                                {% endif %}
+                                <div class="item-info">
+                                    <div class="item-title">{{ item.title }}</div>
+                                    <div class="item-price">{{ item.price }} грн</div>
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </section>
+</main>
 </body>
 </html>

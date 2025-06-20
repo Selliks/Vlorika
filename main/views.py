@@ -33,10 +33,12 @@ def add_to_cart(request, item_id):
 def catalog_view(request):
     male_types = Type.objects.filter(items__gender='male').distinct().prefetch_related('items__images')
     female_types = Type.objects.filter(items__gender='female').distinct().prefetch_related('items__images')
+    unisex_types = Type.objects.filter(items__gender='unisex').distinct().prefetch_related('items__images')
 
     return render(request, 'catalog.html', {
         'male_types': male_types,
         'female_types': female_types,
+        'unisex_types': unisex_types,
     })
 
 
@@ -46,12 +48,14 @@ def cart_view(request):
     total_price = 0
 
     for item_id, entry in cart.items():
-        item = get_object_or_404(Item, id=item_id)
+        try:
+            item = get_object_or_404(Item, id=int(item_id))
+        except:
+            continue
 
-        # Якщо entry — просто число, то це старий формат
         if isinstance(entry, int):
             entry = {'qty': entry, 'size_id': None}
-            cart[item_id] = entry  # оновлюємо на новий формат
+            cart[item_id] = entry
 
         qty = entry.get('qty', 1)
         size_id = entry.get('size_id')
@@ -77,7 +81,7 @@ def cart_view(request):
         if form.is_valid():
             order = form.save()
             request.session['cart'] = {}
-            return render(request, 'order_success.html', {'order': order})
+            return render(request, 'main.html', {'order': order})
     else:
         form = OrderForm()
 
@@ -126,4 +130,3 @@ def registration_view(request):
         form = RegisterForm()
 
     return render(request, 'register/registration.html', {'form': form})
-

@@ -14,9 +14,10 @@
         <img src="{% static 'images/VL-logo.jpg' %}" alt="Профіль" class="profile-logo">
     </a>
     <div class="nav-buttons">
-        <a href="{% url 'catalog' %}">Чоловічий одяг</a>
-        <a href="{% url 'cart' %}" class="cart-link">Корзина ({{ items|length }})</a>
+        <a href="{% url 'catalog' %}#male">Чоловічий одяг</a>
         <a href="{% url 'catalog' %}#female">Жіночий одяг</a>
+        <a href="{% url 'catalog' %}#unisex">Унісекс</a>
+        <a href="{% url 'cart' %}" class="cart-link">Корзина ({{ items|length }})</a>
     </div>
 </header>
 

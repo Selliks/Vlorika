@@ -23,7 +23,7 @@ class Item(models.Model):
     )
 
     title = models.CharField(max_length=56, blank=True)
-    description = models.TextField(max_length=256, blank=True)
+    description = models.TextField(max_length=512, blank=True)
     price = models.IntegerField()
     sizes = models.ManyToManyField(Size, related_name='items')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -43,14 +43,13 @@ class ItemImage(models.Model):
 
 
 class Order(models.Model):
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='orders')
     full_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20)
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.full_name} - {self.item.title}"
+        return self.full_name
 
 
 class OrderItem(models.Model):
@@ -60,4 +59,5 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return self.order
+        return f"{self.order.full_name} - {self.item.title} x{self.quantity}"
+
